@@ -5418,3 +5418,12 @@
      data_type: numbers
   interfaces : paddle::dialect::InferSymbolicShapeInterface
   traits : paddle::dialect::ForwardOnlyTrait
+
+- op : segmented_lora_gemm
+  args : (Tensor x, Tensor lora_weights, Tensor lora_dequant_scale, Tensor lora_quant_scale, Tensor w_offsets, Tensor padding_offsets, Tensor cum_offsets, Tensor seq_lens_this_time, Tensor seq_lens_encoder, Tensor seq_lens_decoder, Tensor cu_seqlens_q, Tensor cu_seqlens_k)
+  output : Tensor(out)
+  infer_meta :
+    func : SegmentedLoraGemmInferMeta
+  kernel :
+    func : segmented_lora_gemm
+    data_type : x

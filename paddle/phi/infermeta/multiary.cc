@@ -6176,5 +6176,29 @@ void TopPSamplingInferMeta(const MetaTensor& x,
   }
 }
 
+void SegmentedLoraGemmInferMeta(const MetaTensor& x,
+                                const MetaTensor& lora_weights,
+                                const MetaTensor& lora_dequant_scale,
+                                const MetaTensor& lora_quant_scale,
+                                const MetaTensor& w_offsets,
+                                const MetaTensor& padding_offsets,
+                                const MetaTensor& cum_offsets,
+                                const MetaTensor& seq_lens_this_time,
+                                const MetaTensor& seq_lens_encoder,
+                                const MetaTensor& seq_lens_decoder,
+                                const MetaTensor& cu_seqlens_q,
+                                const MetaTensor& cu_seqlens_k,
+                                MetaTensor* out) {
+  const int token_num = x.dims()[0];
+  // const int d_in = x.dims()[1];
+  const int d_out = lora_weights.dims()[1];
+  out->set_dims({token_num, d_out});
+  if (x.dtype() == DataType::INT8) {
+    out->set_dtype(DataType::INT32);
+  } else {
+    out->set_dtype(x.dtype());
+  }
+}
+
 }  // namespace phi
 PD_REGISTER_INFER_META_FN(batch_norm_infer, phi::BatchNormInferInferMeta);
